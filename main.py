@@ -26,5 +26,4 @@ my_map = Maps(my_map_short_named)
 my_map.upgrade(generations)
 if output_file != "stdout":
     sys.stdout = open(output_file, 'w')
-count = 0
 print_map(my_map.start_map)

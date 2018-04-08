@@ -5,6 +5,7 @@ from myclasses import Maps
 from myclasses import Fishes
 from myclasses import Shrimps
 
+
 class Test(unittest.TestCase):
     def test_init(self):
         nothing_test = Nothing
@@ -45,7 +46,6 @@ class Test(unittest.TestCase):
         self.assertEqual(my_map.width, 3)
 
 
-"""
 def test_maps_upgrade(self):
         my_map_short_named = []
         my_map_short_named.append([str("n"), str("f"), str("f"), str("s"), str("s")])
@@ -65,7 +65,7 @@ def test_maps_upgrade(self):
         self.assertEqual(my_map.length, 5)
         self.assertEqual(my_map.width, 5)
 
-"""
+
 """
 консольный интерфейс:
 python3 -m unittest utest_myclasses.py
