@@ -46,7 +46,7 @@ class Test(unittest.TestCase):
         self.assertEqual(my_map.width, 3)
 
 
-def test_maps_upgrade(self):
+    def test_maps_upgrade(self):
         my_map_short_named = []
         my_map_short_named.append([str("n"), str("f"), str("f"), str("s"), str("s")])
         my_map_short_named.append([str("f"), str("f"), str("r"), str("r"), str("s")])
@@ -58,8 +58,7 @@ def test_maps_upgrade(self):
                      [Fishes, Nothing, Rock, Rock, Nothing],
                      [Nothing, Nothing, Nothing, Shrimps, Nothing],
                      [Nothing, Nothing, Nothing, Shrimps, Nothing],
-                     [Nothing, Rock, Nothing, Shrimps, Nothing]
-                     ]
+                     [Nothing, Rock, Nothing, Shrimps, Nothing]]
         my_map.upgrade(2)
         self.assertEqual(my_map.start_map, equal_map)
         self.assertEqual(my_map.length, 5)
