@@ -1,7 +1,7 @@
 import sys
 import argparse
-from myclasses import Maps, print_map
-from myclasses import Animal, Fishes, Shrimps, Nothing, Rock
+from model import Maps, print_map
+
 pars = argparse.ArgumentParser()
 pars.add_argument('--input-file', type=str, default='stdin', help='in file')
 pars.add_argument('--output-file', type=str, default='stdout', help='out file')
@@ -21,7 +21,7 @@ list_first_line = [int(x) for x in first_line]
 length, width, generations = list_first_line
 my_map_short_named = []
 for i in range(length):
-    my_map_short_named.append([str(j) for j in str(input())])
+    my_map_short_named.append(list(input().strip()))
 my_map = Maps(my_map_short_named)
 my_map.upgrade(generations)
 if output_file != "stdout":
