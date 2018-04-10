@@ -17,11 +17,23 @@ python3 main.py --input-file "input.txt" --output-file "output.txt"
 if input_file != "stdin":
     sys.stdin = open(input_file, 'r')
 first_line = input().split(' ')
+"""
+считаю первую строчку,где n,m,k передаются
+"""
 list_first_line = [int(x) for x in first_line]
 length, width, generations = list_first_line
+"""
+обработал элеменыт первый строки
+param: length = n
+param: width = m
+param: generations = k
+"""
 my_map_short_named = []
 for i in range(length):
     my_map_short_named.append(list(input().strip()))
+"""
+считал карту океана как лист из str
+"""
 my_map = Maps(my_map_short_named)
 my_map.upgrade(generations)
 if output_file != "stdout":
