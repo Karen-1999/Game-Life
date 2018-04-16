@@ -1,119 +1,98 @@
-class Animal(object):
-    @staticmethod
-    def final_state(map, i, j):
-        pass
+class Animal:
 
-    @staticmethod
-    def short_name():
-        pass
+    count_of_neighbors_nothing = 0
+    count_of_neighbors_fish = 0
+    count_of_neighbors_shrimp = 0
+    count_of_neighbors_rock = 0
 
-
-class Fishes(Animal):
-    @staticmethod
-    def final_state(start_map, i, j):
+    def count_of_neighbors(self, map, i, j):
         """
-        :param start_map: исходная карта океана
-        :param i: столбец клетки
-        :param j: строка клетки
-        :return: какой класс запишется после upgrade
-        класса по его правилам
+        :param map: текущая карта океана
+        :param i: строка клетки
+        :param j: столбец клетки
+        :return: подсчитывает количество соседей всех типов
+        и записывает их в соответствующие атрибуты
         """
-        count_shrimps = 0
+        self.count_of_neighbors_nothing = 0
+        self.count_of_neighbors_fish = 0
+        self.count_of_neighbors_shrimp = 0
+        self.count_of_neighbors_rock = 0
         for r in {i - 1, i, i + 1}:
             for w in {j - 1, j, j + 1}:
-                if (0 <= r < len(start_map)) and \
-                     (0 <= w < len(start_map[0])) and \
+                if (0 <= r < len(map)) and \
+                        (0 <= w < len(map[0])) and \
                         not (r == i and w == j):
-                    if start_map[r][w] == Fishes:
-                        count_shrimps += 1
-        if(count_shrimps >= 4) or(count_shrimps < 2):
-            return Nothing
-        else:
-            return Fishes
+                    if map[r][w] == Nothing:
+                        self.count_of_neighbors_nothing += 1
+                    if map[r][w] == Fishes:
+                        self.count_of_neighbors_fish += 1
+                    if map[r][w] == Rock:
+                        self.count_of_neighbors_rock += 1
+                    if map[r][w] == Shrimps:
+                        self.count_of_neighbors_shrimp += 1
 
-    @staticmethod
+    def rules_of_updating(self):
+        """
+       :param start_map: исходная карта океана
+       :param i: столбец клетки
+       :param j: строка клетки
+       :return: какой класс запишется после upgrade
+       класса по его правилам
+        """
+        pass
+
     def short_name():
         """
         :return: first letter of the name of this class, lowercase
         """
+        pass
+
+
+class Fishes(Animal):
+
+    def rules_of_updating(self):
+        if(self.count_of_neighbors_fish >= 4) or \
+                (self.count_of_neighbors_fish < 2):
+            return Nothing
+        else:
+            return Fishes
+
+    def short_name():
         return "f"
 
 
 class Shrimps(Animal):
-    @staticmethod
-    def final_state(start_map, i, j):
-        """
-        :param start_map: исходная карта океана
-        :param i: столбец клетки
-        :param j: строка клетки
-        :return: какой класс запишется после upgrade
-        класса по его правилам
-        """
-        count_shrimps = 0
-        for r in {i - 1, i, i + 1}:
-            for w in {j - 1, j, j + 1}:
-                if (0 <= r < len(start_map)) and \
-                    (0 <= w < len(start_map[0])) and \
-                        not (r == i and w == j):
-                    if start_map[r][w] == Shrimps:
-                        count_shrimps += 1
-        if(count_shrimps >= 4) or(count_shrimps < 2):
+
+    def rules_of_updating(self):
+        if(self.count_of_neighbors_shrimp >= 4) or \
+                (self.count_of_neighbors_shrimp < 2):
             return Nothing
         else:
             return Shrimps
 
-    @staticmethod
     def short_name():
         return "s"
 
 
 class Nothing(Animal):
-    @staticmethod
-    def final_state(start_map, i, j):
-        """
-        :param start_map: исходная карта океана
-        :param i: столбец клетки
-        :param j: строка клетки
-        :return: какой класс запишется после upgrade
-        класса по его правилам
-        """
-        count_shrimps = 0
-        count_fishes = 0
-        for r in {i - 1, i, i + 1}:
-            for w in {j - 1, j, j + 1}:
-                if (0 <= r < len(start_map)) and \
-                    (0 <= w < len(start_map[0])) and \
-                        not (r == i and w == j):
-                    if start_map[r][w] == Shrimps:
-                        count_shrimps += 1
-                    if start_map[r][w] == Fishes:
-                        count_fishes += 1
-        if count_fishes == 3:
+
+    def rules_of_updating(self):
+        if self.count_of_neighbors_fish == 3:
             return Fishes
-        elif count_shrimps == 3:
+        elif self.count_of_neighbors_shrimp == 3:
             return Shrimps
         else:
             return Nothing
 
-    @staticmethod
     def short_name():
         return "n"
 
 
-class Rock(object):
+class Rock(Animal):
 
-    @staticmethod
-    def final_state(start_map, i, j):
-        """
-        :param start_map: исходная карта океана
-        :param i: столбец клетки
-        :param j: строка клетки
-        :return: какой класс запишется после upgrade
-        класса по его правилам
-        """
+    def rules_of_updating(self):
         return Rock
 
-    @staticmethod
     def short_name():
         return "r"
 
@@ -122,32 +101,30 @@ class Maps(object):
 
     def __init__(self, start):
         """
-        :param start: исходная карта, в нем записаны
-        краткие названия классов(см. dict shortname),
-        я записываю в start_map соответствующие классы
-        по ключу из start
+        :param start: инициализируем по исхожноый карте
+        start_map, width, height
         """
         for i in range(len(start)):
             for j in range(len(start[i])):
                 start[i][j] = long_name_dict[start[i][j]]
         self.start_map = start
         self.width = len(start[0])
-        self.length = len(start)
+        self.height = len(start)
 
     def upgrade(self, k):
         """
-        :param k: count of periods to upgrade
-        :return: the finale state of my map will be
-        recorded in self.startmap
+        :param k: количество поколений, через которое надо
+        подсчитать ответ
+        :return: обновляет k раз карту по правилам, получая ответ
         """
-        n = self.length
-        m = self.width
         for s in range(k):
             edit_map = []
-            for i in range(n):
-                for j in range(m):
+            for i in range(self.height):
+                for j in range(self.width):
                     cell = self.start_map[i][j]
-                    new_cell = cell.final_state(self.start_map, i, j)
+                    cell.count_of_neighbors(self, self.start_map, i, j)
+                    new_cell = \
+                        cell.rules_of_updating(self)
                     if cell != new_cell:
                         edit_map.append([i, j, new_cell])
             for i in range(len(edit_map)):
@@ -155,10 +132,6 @@ class Maps(object):
 
 
 def print_map(map):
-    """
-    :param map: list of lists, state of my map i should print
-    :return: print map
-    """
     for i in map:
         for j in i:
             print(j.short_name(), end="")

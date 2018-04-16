@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
                      [Fishes, Fishes, Fishes, Fishes, Fishes],
                      [Fishes, Fishes, Fishes, Fishes, Fishes]]
         self.assertEqual(my_map.start_map, equal_map)
-        self.assertEqual(my_map.length, 5)
+        self.assertEqual(my_map.height, 5)
         self.assertEqual(my_map.width, 5)
 
     def test_maps_upgrade(self):
@@ -42,9 +42,8 @@ class Test(unittest.TestCase):
                      [Fishes, Nothing, Fishes]]
         my_map.upgrade(1)
         self.assertEqual(my_map.start_map, equal_map)
-        self.assertEqual(my_map.length, 3)
+        self.assertEqual(my_map.height, 3)
         self.assertEqual(my_map.width, 3)
-
 
     def test_maps_upgrade(self):
         my_map_short_named = []
@@ -61,9 +60,82 @@ class Test(unittest.TestCase):
                      [Nothing, Rock, Nothing, Shrimps, Nothing]]
         my_map.upgrade(2)
         self.assertEqual(my_map.start_map, equal_map)
-        self.assertEqual(my_map.length, 5)
+        self.assertEqual(my_map.height, 5)
         self.assertEqual(my_map.width, 5)
 
+    def test_count_of_neighbors_nothing(self):
+        my_map = [[Fishes, Nothing, Shrimps],
+                  [Nothing, Nothing, Nothing],
+                  [Fishes, Nothing, Rock]]
+        my_map[1][1].count_of_neighbors(Nothing, my_map, 1, 1)
+        self.assertEqual(my_map[1][1].count_of_neighbors_fish, 2)
+        self.assertEqual(my_map[1][1].count_of_neighbors_nothing, 4)
+        self.assertEqual(my_map[1][1].count_of_neighbors_shrimp, 1)
+        self.assertEqual(my_map[1][1].count_of_neighbors_rock, 1)
+
+    def test_count_of_neighbors_fish(self):
+        my_map = [[Shrimps, Nothing, Nothing],
+                  [Fishes, Rock, Fishes],
+                  [Shrimps, Fishes, Rock]]
+        my_map[1][2].count_of_neighbors(Fishes, my_map, 1, 2)
+        self.assertEqual(my_map[1][2].count_of_neighbors_fish, 1)
+        self.assertEqual(my_map[1][2].count_of_neighbors_nothing, 2)
+        self.assertEqual(my_map[1][2].count_of_neighbors_shrimp, 0)
+        self.assertEqual(my_map[1][2].count_of_neighbors_rock, 2)
+
+    def test_count_of_neighbors_rock(self):
+        my_map = [[Rock, Nothing, Nothing],
+                  [Fishes, Fishes, Fishes],
+                  [Shrimps, Fishes, Fishes]]
+        my_map[0][0].count_of_neighbors(Rock, my_map, 0, 0)
+        self.assertEqual(my_map[0][0].count_of_neighbors_fish, 2)
+        self.assertEqual(my_map[0][0].count_of_neighbors_nothing, 1)
+        self.assertEqual(my_map[0][0].count_of_neighbors_shrimp, 0)
+        self.assertEqual(my_map[0][0].count_of_neighbors_rock, 0)
+
+    def test_count_of_neighbors_shrimp(self):
+        my_map = [[Fishes, Fishes, Shrimps, Nothing],
+                  [Fishes, Shrimps, Fishes, Rock],
+                  [Shrimps, Fishes, Fishes, Fishes],
+                  [Shrimps, Rock, Shrimps, Nothing]]
+        my_map[3][2].count_of_neighbors(Shrimps, my_map, 3, 2)
+        self.assertEqual(my_map[3][2].count_of_neighbors_fish, 3)
+        self.assertEqual(my_map[3][2].count_of_neighbors_nothing, 1)
+        self.assertEqual(my_map[3][2].count_of_neighbors_shrimp, 0)
+        self.assertEqual(my_map[3][2].count_of_neighbors_rock, 1)
+
+    def test_rules_of_updating_shrimp(self):
+        my_map = [[Fishes, Fishes, Shrimps, Nothing],
+                  [Fishes, Shrimps, Fishes, Rock],
+                  [Shrimps, Fishes, Fishes, Fishes],
+                  [Shrimps, Rock, Shrimps, Nothing]]
+        map = Maps
+        map.start_map = my_map
+        map.start_map[3][2].count_of_neighbors(Shrimps, map.start_map, 3, 2)
+        new_state = map.start_map[3][2].rules_of_updating(Shrimps)
+        self.assertEqual(new_state, Nothing)
+
+    def test_rules_of_updating_fish(self):
+        my_map = [[Fishes, Fishes, Shrimps, Nothing],
+                  [Fishes, Shrimps, Fishes, Rock],
+                  [Shrimps, Fishes, Fishes, Fishes],
+                  [Shrimps, Rock, Shrimps, Nothing]]
+        map = Maps
+        map.start_map = my_map
+        map.start_map[2][1].count_of_neighbors(map, map.start_map, 2, 1)
+        new_state = map.start_map[2][1].rules_of_updating(map)
+        self.assertEqual(new_state, Fishes)
+
+    def test_rules_of_updating_nothing(self):
+        my_map = [[Rock, Fishes, Shrimps, Nothing],
+                  [Nothing, Shrimps, Fishes, Rock],
+                  [Shrimps, Fishes, Nothing, Fishes],
+                  [Shrimps, Rock, Shrimps, Nothing]]
+        map = Maps
+        map.start_map = my_map
+        map.start_map[2][2].count_of_neighbors(map, map.start_map, 2, 2)
+        new_state = map.start_map[2][2].rules_of_updating(map)
+        self.assertEqual(new_state, Fishes)
 
 """
 консольный интерфейс:

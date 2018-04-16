@@ -20,16 +20,15 @@ first_line = input().split(' ')
 """
 считаю первую строчку,где n,m,k передаются
 """
-list_first_line = [int(x) for x in first_line]
-length, width, generations = list_first_line
+height, width, generations = [int(x) for x in first_line]
 """
 обработал элеменыт первый строки
-param: length = n
+param: height = n
 param: width = m
 param: generations = k
 """
 my_map_short_named = []
-for i in range(length):
+for i in range(height):
     my_map_short_named.append(list(input().strip()))
 """
 считал карту океана как лист из str
