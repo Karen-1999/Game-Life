@@ -1,9 +1,12 @@
 class Animal:
 
-    count_of_neighbors_nothing = 0
-    count_of_neighbors_fish = 0
-    count_of_neighbors_shrimp = 0
-    count_of_neighbors_rock = 0
+    """
+    хранит данные о соседях в формате:
+    Nothing: 1,
+    Fishes: 2 и тд.
+    """
+    count_of_neighbors_dict = {
+    }
 
     def count_of_neighbors(self, map, i, j):
         """
@@ -11,25 +14,19 @@ class Animal:
         :param i: строка клетки
         :param j: столбец клетки
         :return: подсчитывает количество соседей всех типов
-        и записывает их в соответствующие атрибуты
+        и записывает их в соответствующие атрибуты в словарь по ключу
+        вид животного
         """
-        self.count_of_neighbors_nothing = 0
-        self.count_of_neighbors_fish = 0
-        self.count_of_neighbors_shrimp = 0
-        self.count_of_neighbors_rock = 0
+        self.count_of_neighbors_dict.clear()
         for r in {i - 1, i, i + 1}:
             for w in {j - 1, j, j + 1}:
                 if (0 <= r < len(map)) and \
                         (0 <= w < len(map[0])) and \
                         not (r == i and w == j):
-                    if map[r][w] == Nothing:
-                        self.count_of_neighbors_nothing += 1
-                    if map[r][w] == Fishes:
-                        self.count_of_neighbors_fish += 1
-                    if map[r][w] == Rock:
-                        self.count_of_neighbors_rock += 1
-                    if map[r][w] == Shrimps:
-                        self.count_of_neighbors_shrimp += 1
+                    if map[r][w] in self.count_of_neighbors_dict:
+                        self.count_of_neighbors_dict[map[r][w]] += 1
+                    else:
+                        self.count_of_neighbors_dict[map[r][w]] = 1
 
     def rules_of_updating(self):
         """
@@ -51,8 +48,10 @@ class Animal:
 class Fishes(Animal):
 
     def rules_of_updating(self):
-        if(self.count_of_neighbors_fish >= 4) or \
-                (self.count_of_neighbors_fish < 2):
+        if(not Fishes in self.count_of_neighbors_dict):
+            self.count_of_neighbors_dict[Fishes] = 0
+        if(self.count_of_neighbors_dict[Fishes] >= 4) or \
+                (self.count_of_neighbors_dict[Fishes] < 2):
             return Nothing
         else:
             return Fishes
@@ -64,8 +63,10 @@ class Fishes(Animal):
 class Shrimps(Animal):
 
     def rules_of_updating(self):
-        if(self.count_of_neighbors_shrimp >= 4) or \
-                (self.count_of_neighbors_shrimp < 2):
+        if(not Shrimps in self.count_of_neighbors_dict):
+            self.count_of_neighbors_dict[Shrimps] = 0
+        if(self.count_of_neighbors_dict[Shrimps] >= 4) or \
+                (self.count_of_neighbors_dict[Shrimps] < 2):
             return Nothing
         else:
             return Shrimps
@@ -77,9 +78,13 @@ class Shrimps(Animal):
 class Nothing(Animal):
 
     def rules_of_updating(self):
-        if self.count_of_neighbors_fish == 3:
+        if(not Fishes in self.count_of_neighbors_dict):
+            self.count_of_neighbors_dict[Fishes] = 0
+        if (not Shrimps in self.count_of_neighbors_dict):
+            self.count_of_neighbors_dict[Shrimps] = 0
+        if self.count_of_neighbors_dict[Fishes] == 3:
             return Fishes
-        elif self.count_of_neighbors_shrimp == 3:
+        elif self.count_of_neighbors_dict[Shrimps] == 3:
             return Shrimps
         else:
             return Nothing
@@ -122,9 +127,9 @@ class Maps(object):
             for i in range(self.height):
                 for j in range(self.width):
                     cell = self.start_map[i][j]
-                    cell.count_of_neighbors(self, self.start_map, i, j)
+                    cell.count_of_neighbors(self.start_map[i][j], self.start_map, i, j)
                     new_cell = \
-                        cell.rules_of_updating(self)
+                        cell.rules_of_updating(self.start_map[i][j])
                     if cell != new_cell:
                         edit_map.append([i, j, new_cell])
             for i in range(len(edit_map)):
