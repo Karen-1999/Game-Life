@@ -10,12 +10,12 @@ class Animal:
 
     def count_of_neighbors(self, map, i, j):
         """
-        :param map: текущая карта океана
+        :param map: текущая карта океана, обьект класса Maps
         :param i: строка клетки
         :param j: столбец клетки
         :return: подсчитывает количество соседей всех типов
-        и записывает их в соответствующие атрибуты в словарь по ключу
-        вид животного
+        и записывает их в словарь count_of_neighbors_dict
+        по ключу вид животного
         """
         self.count_of_neighbors_dict.clear()
         for r in {i - 1, i, i + 1}:
@@ -30,9 +30,9 @@ class Animal:
 
     def rules_of_updating(self):
         """
-       :param start_map: исходная карта океана
-       :param i: столбец клетки
-       :param j: строка клетки
+        для каждого наследника определены условия обновления клетки,
+        которые зависят от количества определенных видов соседей.
+        Количество соседей по видам хранится в словаре
        :return: какой класс запишется после upgrade
        класса по его правилам
         """
@@ -40,7 +40,8 @@ class Animal:
 
     def short_name():
         """
-        :return: first letter of the name of this class, lowercase
+        :return: возвращает первую букву названия вида животного
+        в строчном формате
         """
         pass
 
@@ -106,8 +107,10 @@ class Maps(object):
 
     def __init__(self, start):
         """
-        :param start: инициализируем по исхожноый карте
-        start_map, width, height
+        :param start: инициализируем по исходной карте
+        start_map - в ячейки записываем instance соответствующих классов,
+        width - ширина океана,
+        height - высота океана
         """
         for i in range(len(start)):
             for j in range(len(start[i])):
@@ -120,7 +123,8 @@ class Maps(object):
         """
         :param k: количество поколений, через которое надо
         подсчитать ответ
-        :return: обновляет k раз карту по правилам, получая ответ
+        :return: обновляет k раз карту по правилам, указанным в классах животных,
+        получая ответ
         """
         for s in range(k):
             edit_map = []
@@ -137,14 +141,20 @@ class Maps(object):
 
 
 def print_map(map):
-    for i in map:
-        for j in i:
-            print(j.short_name(), end="")
+    """
+    :param map: получает карту океана, которую надо печатать
+    в формате "первая буква(строчная) класса" без пробелов
+    :return: печатает карту
+    """
+    for raw in map:
+        for cell in raw:
+            print(cell.short_name(), end="")
         print()
 
 
 """
-long_name_dict:    Доступ по краткому имени к названию класса
+long_name_dict: словарь, обеспечивающий 
+доступ по краткому имени к названию класса
 """
 long_name_dict = {
     'f': Fishes,
