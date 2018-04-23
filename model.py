@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 class Animal:
 
     """
@@ -5,8 +8,7 @@ class Animal:
     Nothing: 1,
     Fishes: 2 и тд.
     """
-    count_of_neighbors_dict = {
-    }
+    count_of_neighbors_dict = defaultdict
 
     def count_of_neighbors(self, map, i, j):
         """
@@ -23,11 +25,8 @@ class Animal:
                 if (0 <= r < len(map)) and \
                         (0 <= w < len(map[0])) and \
                         not (r == i and w == j):
-                    if map[r][w] in self.count_of_neighbors_dict:
-                        self.count_of_neighbors_dict[map[r][w]] += 1
-                    else:
-                        self.count_of_neighbors_dict[map[r][w]] = 1
-
+                self.count_of_neighbors_dict[map[r][w]] += 1
+                    
     def rules_of_updating(self):
         """
         для каждого наследника определены условия обновления клетки,
