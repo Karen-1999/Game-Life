@@ -47,33 +47,35 @@ class Test(unittest.TestCase):
         self.assertEqual(my_map.height, 3)
         self.assertEqual(my_map.width, 3)
 
-
     def test_count_of_neighbors_nothing(self):
         my_map = [[Fishes, Nothing, Shrimps],
                   [Nothing, Nothing, Nothing],
                   [Fishes, Nothing, Rock]]
         my_map[1][1].count_of_neighbors(Animal, my_map, 1, 1)
-        self.assertEqual(my_map[1][1].count_of_neighbors_dict[Fishes], 2)
-        self.assertEqual(my_map[1][1].count_of_neighbors_dict[Nothing], 4)
-        self.assertEqual(my_map[1][1].count_of_neighbors_dict[Shrimps], 1)
-        self.assertEqual(my_map[1][1].count_of_neighbors_dict[Rock], 1)
+        count_of_neighbors_dict = my_map[1][1].get_count_of_neighbors_dict(Animal)
+        self.assertEqual(count_of_neighbors_dict[Fishes], 2)
+        self.assertEqual(count_of_neighbors_dict[Nothing], 4)
+        self.assertEqual(count_of_neighbors_dict[Shrimps], 1)
+        self.assertEqual(count_of_neighbors_dict[Rock], 1)
 
     def test_count_of_neighbors_fish(self):
         my_map = [[Shrimps, Nothing, Nothing],
                   [Fishes, Rock, Fishes],
                   [Shrimps, Fishes, Rock]]
         my_map[1][2].count_of_neighbors(Animal, my_map, 1, 2)
-        self.assertEqual(my_map[1][2].count_of_neighbors_dict[Fishes], 1)
-        self.assertEqual(my_map[1][2].count_of_neighbors_dict[Nothing], 2)
-        self.assertEqual(my_map[1][2].count_of_neighbors_dict[Rock], 2)
+        count_of_neighbors_dict = my_map[1][2].get_count_of_neighbors_dict(Animal)
+        self.assertEqual(count_of_neighbors_dict[Fishes], 1)
+        self.assertEqual(count_of_neighbors_dict[Nothing], 2)
+        self.assertEqual(count_of_neighbors_dict[Rock], 2)
 
     def test_count_of_neighbors_rock(self):
         my_map = [[Rock, Nothing, Nothing],
                   [Fishes, Fishes, Fishes],
                   [Shrimps, Fishes, Fishes]]
         my_map[0][0].count_of_neighbors(Animal, my_map, 0, 0)
-        self.assertEqual(my_map[0][0].count_of_neighbors_dict[Fishes], 2)
-        self.assertEqual(my_map[0][0].count_of_neighbors_dict[Nothing], 1)
+        count_of_neighbors_dict = my_map[0][0].get_count_of_neighbors_dict(Animal)
+        self.assertEqual(count_of_neighbors_dict[Fishes], 2)
+        self.assertEqual(count_of_neighbors_dict[Nothing], 1)
 
     def test_count_of_neighbors_shrimp(self):
         my_map = [[Fishes, Fishes, Shrimps, Nothing],
@@ -81,10 +83,10 @@ class Test(unittest.TestCase):
                   [Shrimps, Fishes, Fishes, Fishes],
                   [Shrimps, Rock, Shrimps, Nothing]]
         my_map[3][2].count_of_neighbors(Animal, my_map, 3, 2)
-        self.assertEqual(my_map[3][2].count_of_neighbors_dict[Fishes], 3)
-        self.assertEqual(my_map[3][2].count_of_neighbors_dict[Nothing], 1)
-        self.assertEqual(my_map[3][2].count_of_neighbors_dict[Rock], 1)
-
+        count_of_neighbors_dict = my_map[3][2].get_count_of_neighbors_dict(Animal)
+        self.assertEqual(count_of_neighbors_dict[Fishes], 3)
+        self.assertEqual(count_of_neighbors_dict[Nothing], 1)
+        self.assertEqual(count_of_neighbors_dict[Rock], 1)
 
     def test_rules_of_updating_fish(self):
         my_map = [[Fishes, Fishes, Shrimps, Nothing],
@@ -93,6 +95,7 @@ class Test(unittest.TestCase):
                   [Shrimps, Rock, Shrimps, Nothing]]
         map = Maps
         map.start_map = my_map
+
         map.start_map[2][1].count_of_neighbors(Fishes, map.start_map, 2, 1)
         new_state = map.start_map[2][1].rules_of_updating(Fishes)
         self.assertEqual(new_state, Fishes)

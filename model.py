@@ -2,13 +2,19 @@ from collections import defaultdict
 
 
 class Animal:
-
     """
     хранит данные о соседях в формате:
     Nothing: 1,
     Fishes: 2 и тд.
     """
-    count_of_neighbors_dict = defaultdict
+    _count_of_neighbors_dict = defaultdict(int)
+
+    def get_count_of_neighbors_dict(self):
+        """
+        возвращает приватный аттрибут _count_of_neighbors_dict
+        :return:
+        """
+        return self._count_of_neighbors_dict
 
     def count_of_neighbors(self, map, i, j):
         """
@@ -16,17 +22,17 @@ class Animal:
         :param i: строка клетки
         :param j: столбец клетки
         :return: подсчитывает количество соседей всех типов
-        и записывает их в словарь count_of_neighbors_dict
+        и записывает их в словарь _count_of_neighbors_dict
         по ключу вид животного
         """
-        self.count_of_neighbors_dict.clear()
+        self._count_of_neighbors_dict.clear()
         for r in {i - 1, i, i + 1}:
             for w in {j - 1, j, j + 1}:
                 if (0 <= r < len(map)) and \
                         (0 <= w < len(map[0])) and \
                         not (r == i and w == j):
-                self.count_of_neighbors_dict[map[r][w]] += 1
-                    
+                    self._count_of_neighbors_dict[map[r][w]] += 1
+
     def rules_of_updating(self):
         """
         для каждого наследника определены условия обновления клетки,
@@ -48,10 +54,10 @@ class Animal:
 class Fishes(Animal):
 
     def rules_of_updating(self):
-        if(not Fishes in self.count_of_neighbors_dict):
-            self.count_of_neighbors_dict[Fishes] = 0
-        if(self.count_of_neighbors_dict[Fishes] >= 4) or \
-                (self.count_of_neighbors_dict[Fishes] < 2):
+        if (not Fishes in self._count_of_neighbors_dict):
+            self._count_of_neighbors_dict[Fishes] = 0
+        if (self._count_of_neighbors_dict[Fishes] >= 4) or \
+                (self._count_of_neighbors_dict[Fishes] < 2):
             return Nothing
         else:
             return Fishes
@@ -63,10 +69,10 @@ class Fishes(Animal):
 class Shrimps(Animal):
 
     def rules_of_updating(self):
-        if(not Shrimps in self.count_of_neighbors_dict):
-            self.count_of_neighbors_dict[Shrimps] = 0
-        if(self.count_of_neighbors_dict[Shrimps] >= 4) or \
-                (self.count_of_neighbors_dict[Shrimps] < 2):
+        if (not Shrimps in self._count_of_neighbors_dict):
+            self._count_of_neighbors_dict[Shrimps] = 0
+        if (self._count_of_neighbors_dict[Shrimps] >= 4) or \
+                (self._count_of_neighbors_dict[Shrimps] < 2):
             return Nothing
         else:
             return Shrimps
@@ -78,13 +84,13 @@ class Shrimps(Animal):
 class Nothing(Animal):
 
     def rules_of_updating(self):
-        if(not Fishes in self.count_of_neighbors_dict):
-            self.count_of_neighbors_dict[Fishes] = 0
-        if (not Shrimps in self.count_of_neighbors_dict):
-            self.count_of_neighbors_dict[Shrimps] = 0
-        if self.count_of_neighbors_dict[Fishes] == 3:
+        if (not Fishes in self._count_of_neighbors_dict):
+            self._count_of_neighbors_dict[Fishes] = 0
+        if (not Shrimps in self._count_of_neighbors_dict):
+            self._count_of_neighbors_dict[Shrimps] = 0
+        if self._count_of_neighbors_dict[Fishes] == 3:
             return Fishes
-        elif self.count_of_neighbors_dict[Shrimps] == 3:
+        elif self._count_of_neighbors_dict[Shrimps] == 3:
             return Shrimps
         else:
             return Nothing
