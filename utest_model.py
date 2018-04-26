@@ -5,24 +5,23 @@ from model import Rock
 from model import Maps
 from model import Fishes
 from model import Shrimps
-import model
 
 
 class Test(unittest.TestCase):
     def test_init(self):
         nothing_test = Nothing
-        self.assertEqual(nothing_test.short_name(), "n")
+        self.assertEqual(nothing_test.short_name, "n")
         fishes_test = Fishes
-        self.assertEqual(fishes_test.short_name(), "f")
+        self.assertEqual(fishes_test.short_name, "f")
         shrimps_test = Shrimps
-        self.assertEqual(shrimps_test.short_name(), "s")
+        self.assertEqual(shrimps_test.short_name, "s")
         rock_test = Rock
-        self.assertEqual(rock_test.short_name(), "r")
+        self.assertEqual(rock_test.short_name, "r")
 
     def test_maps_init(self):
         my_map_short_named = []
-        for i in range(5):
-            my_map_short_named.append([str("f") for j in range(5)])
+        for raw in range(5):
+            my_map_short_named.append([str("f") for collumn in range(5)])
         my_map = Maps(my_map_short_named)
         equal_map = [[Fishes, Fishes, Fishes, Fishes, Fishes],
                      [Fishes, Fishes, Fishes, Fishes, Fishes],
