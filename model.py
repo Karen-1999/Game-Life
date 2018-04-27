@@ -1,6 +1,4 @@
 from collections import defaultdict
-import sys
-import argparse
 
 
 class Animal:
