@@ -8,6 +8,11 @@ class Animal:
     Fishes: 2 и тд.
     """
     _count_of_neighbors_dict = defaultdict(int)
+    short_name = "a"
+    """
+    первая буква названия вида животного
+    в строчном формате
+    """
 
     def get_count_of_neighbors_dict(self):
         """
@@ -16,22 +21,22 @@ class Animal:
         """
         return self._count_of_neighbors_dict
 
-    def count_of_neighbors(self, map, i, j):
+    def count_of_neighbors(self, map, raw, collumn):
         """
         :param map: текущая карта океана, обьект класса Maps
-        :param i: строка клетки
-        :param j: столбец клетки
+        :param raw: строка клетки
+        :param collumn: столбец клетки
         :return: подсчитывает количество соседей всех типов
         и записывает их в словарь _count_of_neighbors_dict
         по ключу вид животного
         """
         self._count_of_neighbors_dict.clear()
-        for r in {i - 1, i, i + 1}:
-            for w in {j - 1, j, j + 1}:
+        for r in {raw - 1, raw, raw + 1}:
+            for c in {collumn - 1, collumn, collumn + 1}:
                 if (0 <= r < len(map)) and \
-                        (0 <= w < len(map[0])) and \
-                        not (r == i and w == j):
-                    self._count_of_neighbors_dict[map[r][w]] += 1
+                        (0 <= c < len(map[0])) and \
+                        not (r == raw and c == collumn):
+                    self._count_of_neighbors_dict[map[r][c]] += 1
 
     def rules_of_updating(self):
         """
@@ -43,51 +48,33 @@ class Animal:
         """
         pass
 
-    def short_name():
-        """
-        :return: возвращает первую букву названия вида животного
-        в строчном формате
-        """
-        pass
-
 
 class Fishes(Animal):
+    short_name = 'f'
 
     def rules_of_updating(self):
-        if (not Fishes in self._count_of_neighbors_dict):
-            self._count_of_neighbors_dict[Fishes] = 0
         if (self._count_of_neighbors_dict[Fishes] >= 4) or \
                 (self._count_of_neighbors_dict[Fishes] < 2):
             return Nothing
         else:
             return Fishes
 
-    def short_name():
-        return "f"
-
 
 class Shrimps(Animal):
+    short_name = 's'
 
     def rules_of_updating(self):
-        if (not Shrimps in self._count_of_neighbors_dict):
-            self._count_of_neighbors_dict[Shrimps] = 0
         if (self._count_of_neighbors_dict[Shrimps] >= 4) or \
                 (self._count_of_neighbors_dict[Shrimps] < 2):
             return Nothing
         else:
             return Shrimps
 
-    def short_name():
-        return "s"
-
 
 class Nothing(Animal):
+    short_name = 'n'
 
     def rules_of_updating(self):
-        if (not Fishes in self._count_of_neighbors_dict):
-            self._count_of_neighbors_dict[Fishes] = 0
-        if (not Shrimps in self._count_of_neighbors_dict):
-            self._count_of_neighbors_dict[Shrimps] = 0
         if self._count_of_neighbors_dict[Fishes] == 3:
             return Fishes
         elif self._count_of_neighbors_dict[Shrimps] == 3:
@@ -95,17 +82,12 @@ class Nothing(Animal):
         else:
             return Nothing
 
-    def short_name():
-        return "n"
-
 
 class Rock(Animal):
+    short_name = 'r'
 
     def rules_of_updating(self):
         return Rock
-
-    def short_name():
-        return "r"
 
 
 class Maps(object):
@@ -124,14 +106,14 @@ class Maps(object):
         self.width = len(start[0])
         self.height = len(start)
 
-    def upgrade(self, k):
+    def upgrade(self, number_of_generations):
         """
-        :param k: количество поколений, через которое надо
+        :param number_of_generations: количество поколений, через которое надо
         подсчитать ответ
         :return: обновляет k раз карту по правилам, указанным в классах животных,
         получая ответ
         """
-        for s in range(k):
+        for generation in range(number_of_generations):
             edit_map = []
             for i in range(self.height):
                 for j in range(self.width):
@@ -153,17 +135,18 @@ def print_map(map):
     """
     for raw in map:
         for cell in raw:
-            print(cell.short_name(), end="")
+            print(cell.short_name, end="")
         print()
 
 
 """
 long_name_dict: словарь, обеспечивающий 
-доступ по краткому имени к названию класса
+доступ по краткому имени к названию класса,
+генерируется автоматически для всех
+подклассов класса Animal
 """
+
 long_name_dict = {
-    'f': Fishes,
-    'r': Rock,
-    'n': Nothing,
-    's': Shrimps,
+    sub_classes_of_Animal.short_name: sub_classes_of_Animal
+    for sub_classes_of_Animal in Animal.__subclasses__()
 }
