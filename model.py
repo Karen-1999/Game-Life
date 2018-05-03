@@ -21,7 +21,7 @@ class Animal:
         """
         return self._count_of_neighbors_dict
 
-    def count_of_neighbors(self, map, raw, collumn):
+    def count_of_neighbors(self, ocean_map, raw, collumn):
         """
         :param map: текущая карта океана, обьект класса Maps
         :param raw: строка клетки
@@ -33,10 +33,10 @@ class Animal:
         self._count_of_neighbors_dict.clear()
         for r in {raw - 1, raw, raw + 1}:
             for c in {collumn - 1, collumn, collumn + 1}:
-                if (0 <= r < len(map)) and \
-                        (0 <= c < len(map[0])) and \
+                if (0 <= r < len(ocean_map)) and \
+                        (0 <= c < len(ocean_map[0])) and \
                         not (r == raw and c == collumn):
-                    self._count_of_neighbors_dict[map[r][c]] += 1
+                    self._count_of_neighbors_dict[ocean_map[r][c]] += 1
 
     def rules_of_updating(self):
         """
@@ -91,34 +91,45 @@ class Rock(Animal):
 
 
 class Maps(object):
+    """
+    long_name_dict: словарь, обеспечивающий
+    доступ по краткому имени к названию класса,
+    генерируется автоматически для всех
+    подклассов класса Animal
+    """
+    long_name_dict = {
+        sub_classes_of_Animal.short_name: sub_classes_of_Animal
+        for sub_classes_of_Animal in Animal.__subclasses__()
+    }
 
-    def __init__(self, start):
+    def __init__(self, ocean_map):
         """
         :param start: инициализируем по исходной карте
         start_map - в ячейки записываем instance соответствующих классов,
         width - ширина океана,
         height - высота океана
         """
-        for i in range(len(start)):
-            for j in range(len(start[i])):
-                start[i][j] = long_name_dict[start[i][j]]
-        self.start_map = start
-        self.width = len(start[0])
-        self.height = len(start)
+        for i in range(len(ocean_map)):
+            for j in range(len(ocean_map[i])):
+                ocean_map[i][j] = self.long_name_dict[ocean_map[i][j]]
+        self.start_map = ocean_map
+        self.width = len(ocean_map[0])
+        self.height = len(ocean_map)
 
     def upgrade(self, number_of_generations):
         """
-        :param number_of_generations: количество поколений, через которое надо
-        подсчитать ответ
-        :return: обновляет k раз карту по правилам, указанным в классах животных,
-        получая ответ
+        :param number_of_generations: количество поколений,
+        через которое надо подсчитать ответ
+        :return: обновляет k раз карту по правилам,
+        указанным в классах животных, получая ответ
         """
         for generation in range(number_of_generations):
             edit_map = []
             for i in range(self.height):
                 for j in range(self.width):
                     cell = self.start_map[i][j]
-                    cell.count_of_neighbors(self.start_map[i][j], self.start_map, i, j)
+                    cell.count_of_neighbors(self.start_map[i][j],
+                                            self.start_map, i, j)
                     new_cell = \
                         cell.rules_of_updating(self.start_map[i][j])
                     if cell != new_cell:
@@ -127,26 +138,13 @@ class Maps(object):
                 self.start_map[edit_map[i][0]][edit_map[i][1]] = edit_map[i][2]
 
 
-def print_map(map):
+def print_map(map_to_print):
     """
     :param map: получает карту океана, которую надо печатать
     в формате "первая буква(строчная) класса" без пробелов
     :return: печатает карту
     """
-    for raw in map:
+    for raw in map_to_print:
         for cell in raw:
             print(cell.short_name, end="")
         print()
-
-
-"""
-long_name_dict: словарь, обеспечивающий 
-доступ по краткому имени к названию класса,
-генерируется автоматически для всех
-подклассов класса Animal
-"""
-
-long_name_dict = {
-    sub_classes_of_Animal.short_name: sub_classes_of_Animal
-    for sub_classes_of_Animal in Animal.__subclasses__()
-}

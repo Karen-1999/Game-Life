@@ -51,7 +51,8 @@ class Test(unittest.TestCase):
                   [Nothing, Nothing, Nothing],
                   [Fishes, Nothing, Rock]]
         my_map[1][1].count_of_neighbors(Animal, my_map, 1, 1)
-        count_of_neighbors_dict = my_map[1][1].get_count_of_neighbors_dict(Animal)
+        count_of_neighbors_dict = \
+            my_map[1][1].get_count_of_neighbors_dict(Animal)
         self.assertEqual(count_of_neighbors_dict[Fishes], 2)
         self.assertEqual(count_of_neighbors_dict[Nothing], 4)
         self.assertEqual(count_of_neighbors_dict[Shrimps], 1)
@@ -62,7 +63,8 @@ class Test(unittest.TestCase):
                   [Fishes, Rock, Fishes],
                   [Shrimps, Fishes, Rock]]
         my_map[1][2].count_of_neighbors(Animal, my_map, 1, 2)
-        count_of_neighbors_dict = my_map[1][2].get_count_of_neighbors_dict(Animal)
+        count_of_neighbors_dict = \
+            my_map[1][2].get_count_of_neighbors_dict(Animal)
         self.assertEqual(count_of_neighbors_dict[Fishes], 1)
         self.assertEqual(count_of_neighbors_dict[Nothing], 2)
         self.assertEqual(count_of_neighbors_dict[Rock], 2)
@@ -72,7 +74,8 @@ class Test(unittest.TestCase):
                   [Fishes, Fishes, Fishes],
                   [Shrimps, Fishes, Fishes]]
         my_map[0][0].count_of_neighbors(Animal, my_map, 0, 0)
-        count_of_neighbors_dict = my_map[0][0].get_count_of_neighbors_dict(Animal)
+        count_of_neighbors_dict = \
+            my_map[0][0].get_count_of_neighbors_dict(Animal)
         self.assertEqual(count_of_neighbors_dict[Fishes], 2)
         self.assertEqual(count_of_neighbors_dict[Nothing], 1)
 
@@ -82,7 +85,8 @@ class Test(unittest.TestCase):
                   [Shrimps, Fishes, Fishes, Fishes],
                   [Shrimps, Rock, Shrimps, Nothing]]
         my_map[3][2].count_of_neighbors(Animal, my_map, 3, 2)
-        count_of_neighbors_dict = my_map[3][2].get_count_of_neighbors_dict(Animal)
+        count_of_neighbors_dict = \
+            my_map[3][2].get_count_of_neighbors_dict(Animal)
         self.assertEqual(count_of_neighbors_dict[Fishes], 3)
         self.assertEqual(count_of_neighbors_dict[Nothing], 1)
         self.assertEqual(count_of_neighbors_dict[Rock], 1)

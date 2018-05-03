@@ -27,14 +27,22 @@ param: height = n
 param: width = m
 param: generations = k
 """
-my_map_short_named = []
-for i in range(height):
-    my_map_short_named.append(list(input().strip()))
+starting_ocean_map = []
+"""
+исходная карта,
+"""
+for raw in range(height):
+    starting_ocean_map.append(list(input().strip()))
 """
 считал карту океана как лист из str
 """
-my_map = Maps(my_map_short_named)
-my_map.upgrade(generations)
+ocean_map = Maps(starting_ocean_map)
+"""
+карта океана, в ячейках которой конструктор
+исходной карте записал объекты соответствующих
+классов
+"""
+ocean_map.upgrade(generations)
 if output_file != "stdout":
     sys.stdout = open(output_file, 'w')
-print_map(my_map.start_map)
+print_map(ocean_map.start_map)
